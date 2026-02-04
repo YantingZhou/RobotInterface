@@ -1,0 +1,7 @@
+{
+  "name": "0203",
+  "description": "An interactive playground for soft-edged metaball liquids with configurable parameters, motion, and rendering logic.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
