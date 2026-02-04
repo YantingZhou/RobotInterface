@@ -22,14 +22,15 @@ export interface SimulationConfig {
   oscSpeed: number;
   oscAmplitude: number;
   crossRotation: number;
+  transitionSpeed: number; // New parameter for switching smoothness
   mainColor: string;
   gradientColorEnd: string;
   tintMode: 'single' | 'gradient';
   breathSpeed: number;
   breathRange: number;
-  dotShape: 'roundedRect' | 'circle' | 'cross' | 'triangle' | 'wire' | 'mixed' | 'smiley' | 'heart' | 'star' | 'diamond' | 'hexagon' | 'sun' | 'music' | 'question' | 'errorCross' | 'gear' | 'evCar' | 'eye' | 'xpeng';
+  dotShape: 'roundedRect' | 'circle' | 'cross' | 'triangle' | 'wire' | 'mixed' | 'smiley' | 'heart' | 'star' | 'diamond' | 'hexagon' | 'sun' | 'music' | 'question' | 'errorCross' | 'gear' | 'evCar' | 'eye' | 'xpeng' | 'electric';
   // Use a refined type for mixedShapes to ensure they match valid dot shapes
-  mixedShapes: ('roundedRect' | 'circle' | 'cross' | 'triangle' | 'wire' | 'smiley' | 'heart' | 'star' | 'diamond' | 'hexagon' | 'sun' | 'music' | 'question' | 'errorCross' | 'gear' | 'evCar' | 'eye' | 'xpeng')[];
+  mixedShapes: ('roundedRect' | 'circle' | 'cross' | 'triangle' | 'wire' | 'smiley' | 'heart' | 'star' | 'diamond' | 'hexagon' | 'sun' | 'music' | 'question' | 'errorCross' | 'gear' | 'evCar' | 'eye' | 'xpeng' | 'electric')[];
   // Character Mode Specific Effects
   charEnableGlare: boolean;
   charFlicker: number;

@@ -28,6 +28,7 @@ const App: React.FC = () => {
     oscSpeed: 1.8,
     oscAmplitude: 160,
     crossRotation: 0,
+    transitionSpeed: 0.15,
     mainColor: '#ffffff',
     gradientColorEnd: '#ef4444',
     tintMode: 'single',

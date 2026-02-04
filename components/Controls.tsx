@@ -112,7 +112,7 @@ const Controls: React.FC<Props> = ({ config, onChange, activePreset, onPresetCha
 
   const shapes: Array<Exclude<SimulationConfig['dotShape'], 'mixed'>> = [
     'roundedRect', 'circle', 'cross', 'triangle', 'smiley', 'heart', 'star', 
-    'music', 'gear', 'evCar', 'eye', 'xpeng'
+    'music', 'gear', 'question', 'errorCross', 'electric', 'eye', 'xpeng'
   ];
 
   const getIcon = (s: string) => {
@@ -124,11 +124,13 @@ const Controls: React.FC<Props> = ({ config, onChange, activePreset, onPresetCha
       case 'eye': return '👁️';
       case 'gear': return '⚙️';
       case 'smiley': return '😊';
-      case 'evCar': return '🚗';
       case 'cross': return '✚';
       case 'triangle': return '▲';
       case 'circle': return '●';
       case 'roundedRect': return '■';
+      case 'question': return '❓';
+      case 'errorCross': return '❌';
+      case 'electric': return '⚡';
       default: return '●';
     }
   };
@@ -148,7 +150,7 @@ const Controls: React.FC<Props> = ({ config, onChange, activePreset, onPresetCha
         <h3 className="px-6 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-4 flex items-center gap-2">
           <div className="w-1 h-1 bg-white/20 rounded-full"></div> VA States
         </h3>
-        <div className="px-6 flex gap-2">
+        <div className="px-6 flex gap-2 mb-4">
           {[1, 2, 3, 4, 5].map(n => (
             <button 
               key={n} 
@@ -160,6 +162,14 @@ const Controls: React.FC<Props> = ({ config, onChange, activePreset, onPresetCha
             </button>
           ))}
         </div>
+        <ControlItem 
+          label="Switching Speed" 
+          value={config.transitionSpeed} 
+          min={0.01} max={1.0} step={0.01} 
+          onChange={(v) => update('transitionSpeed', v)} 
+          description="Global transition smoothness between states." 
+          color={config.mainColor} 
+        />
       </section>
 
       <section>
