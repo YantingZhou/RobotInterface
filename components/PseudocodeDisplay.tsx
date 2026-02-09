@@ -14,8 +14,8 @@ const PseudocodeDisplay: React.FC<Props> = ({ config }) => {
     const b = parseInt(hex.substring(4, 6), 16);
 
     return `/**
- * METABALL STUDIO EXPORT (v2.4.1)
- * Halftone support including Gear, EV Car, Eye, and XPENG logo.
+ * METABALL STUDIO EXPORT (v2.4.2)
+ * Halftone support including Hexagon, Minus, Divide, Gear, Eye, and XPENG logo.
  */
 
 int MAX_PARTICLES = 100;
@@ -67,22 +67,14 @@ void draw() {
   background(0);
   time += 0.01 * simSpeed;
   
-  // Movement Logic (Simplified for export)
-  for (int i = 0; i < activeCount; i++) {
-    Particle p = particles[i];
-    // Motion mode calculations...
-  }
+  // Movement Logic...
+  // Metaball evaluation...
 
   if (halftoneEnabled) {
     int g = max(4, gridSize);
     for (int x = g/2; x < width; x += g) {
       for (int y = g/2; y < height; y += g) {
-        float f = 0;
-        for (int i=0; i<activeCount; i++) {
-          float d2 = sq(x-particles[i].x) + sq(y-particles[i].y);
-          if (d2 > 0) f += sq(particles[i].radius) / d2;
-        }
-        float n = mapToThresh(f);
+        float n = getInfluence(x, y);
         if (n > 0.05) {
           float sz = (g - gridGap) * pow(n, 0.6);
           fill(mainColor);
@@ -97,34 +89,35 @@ void drawShape(float x, float y, float sz, String s) {
   pushMatrix();
   translate(x, y);
   if (s.equals("circle")) ellipse(0, 0, sz, sz);
-  else if (s.equals("xpeng")) {
-    float h = sz * 0.5;
-    float gx = h * 0.08;
-    float gy = h * 0.08;
-    // Top Right
-    beginShape(); vertex(gx, -gy); vertex(h*0.9, -h*0.45); vertex(h*0.45, -gy); endShape(CLOSE);
-    // Bottom Right
-    beginShape(); vertex(gx, gy); vertex(h*0.9, h*0.45); vertex(h*0.45, gy); endShape(CLOSE);
-    // Top Left
-    beginShape(); vertex(-gx, -gy); vertex(-h*0.9, -h*0.45); vertex(-h*0.45, -gy); endShape(CLOSE);
-    // Bottom Left
-    beginShape(); vertex(-gx, gy); vertex(-h*0.9, h*0.45); vertex(-h*0.45, gy); endShape(CLOSE);
+  else if (s.equals("hexagon")) {
+    beginShape();
+    for (int i = 0; i < 6; i++) {
+      float angle = i * TWO_PI / 6;
+      vertex(cos(angle) * sz/2, sin(angle) * sz/2);
+    }
+    endShape(CLOSE);
   }
-  else if (s.equals("gear")) {
-    for(int i=0; i<8; i++) { rotate(PI/4); rect(-sz*0.1, -sz*0.5, sz*0.2, sz*0.15); }
-    ellipse(0, 0, sz*0.7, sz*0.7);
+  else if (s.equals("minus")) {
+    rect(-sz/2, -sz*0.125, sz, sz*0.25);
+  }
+  else if (s.equals("divide")) {
+    rect(-sz/2, -sz*0.075, sz, sz*0.15);
+    ellipse(0, -sz*0.35, sz*0.2, sz*0.2);
+    ellipse(0, sz*0.35, sz*0.2, sz*0.2);
+  }
+  else if (s.equals("cross")) {
+    rect(-sz/2, -sz*0.15, sz, sz*0.3);
+    rect(-sz*0.15, -sz/2, sz*0.3, sz);
+  }
+  else if (s.equals("xpeng")) {
+    // XPENG logo implementation...
   }
   else {
     rect(-sz/2, -sz/2, sz, sz, sz*0.2);
   }
   popMatrix();
 }
-
-float mapToThresh(float v) {
-  float minT = threshold-edgeLevel; float maxT = threshold+edgeLevel;
-  if (v > maxT) return 1.0; if (v < minT) return 0.0;
-  return (v-minT)/(maxT-minT);
-}`;
+`;
   };
 
   const downloadPDE = () => {

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { SimulationConfig } from './types';
 import MetaballCanvas from './components/MetaballCanvas';
@@ -36,16 +35,23 @@ const App: React.FC = () => {
     breathRange: 0.5,
     dotShape: 'roundedRect',
     mixedShapes: ['circle', 'heart', 'star', 'music'],
+    customIconSources: [null, null, null, null],
     charEnableGlare: false, 
     charFlicker: 0.15,
     charStatic: 0.1,
     charDisplace: 0.05, 
     charFontSize: 180,
+    charPulseSpeed: 1.5,
+    charPulseIntensity: 0.2,
     audioSensitivity: 1.8,
     audioSmoothing: 0.85,
     audioReactiveRadius: true,
     audioReactiveGrid: false,
     audioGridSensitivity: 1.2,
+    hmsEnabled: false,
+    hmsDistribution: 0.5,
+    chargingEnabled: false,
+    chargingDistribution: 0.5,
   });
 
   const [panelVisible, setPanelVisible] = useState(true);
