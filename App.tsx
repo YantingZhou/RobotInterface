@@ -1,61 +1,88 @@
 import React, { useState } from 'react';
-import { SimulationConfig } from './types';
+import { SimulationConfig, MathPattern } from './types';
 import MetaballCanvas from './components/MetaballCanvas';
 import Controls from './components/Controls';
 
 const App: React.FC = () => {
-  const [config, setConfig] = useState<SimulationConfig>({
-    particleCount: 32,
-    baseRadius: 42,
-    speed: 1.2,
-    motionRange: 140,
-    dispersion: 0.35,
-    threshold: 1.1,
-    edgeLevel: 0.7,
-    pixelStep: 1,
-    gridSize: 80,
-    gridGap: 2,
-    dotScale: 1.05,
-    enableHalftone: true,
-    motionMode: 'random',
-    characterText: 'META',
-    imageSource: null,
-    imageScale: 1.0,
-    patternScale: 1.0,
-    offsetX: 0,
-    offsetY: 0,
-    oscSpeed: 1.8,
-    oscAmplitude: 160,
-    crossRotation: 0,
-    transitionSpeed: 0.15,
-    mainColor: '#ffffff',
-    gradientColorEnd: '#ef4444',
-    tintMode: 'single',
-    breathSpeed: 2.5,
-    breathRange: 0.5,
-    dotShape: 'roundedRect',
-    mixedShapes: ['circle', 'heart', 'star', 'music'],
-    customIconSources: [null, null, null, null],
-    charEnableGlare: false, 
-    charFlicker: 0.15,
-    charStatic: 0.1,
-    charDisplace: 0.05, 
-    charFontSize: 180,
-    charPulseSpeed: 1.5,
-    charPulseIntensity: 0.2,
-    audioSensitivity: 1.8,
-    audioSmoothing: 0.85,
-    audioReactiveRadius: true,
-    audioReactiveGrid: false,
-    audioGridSensitivity: 1.2,
-    hmsEnabled: false,
-    hmsDistribution: 0.5,
-    chargingEnabled: false,
-    chargingDistribution: 0.5,
+  const [config, setConfig] = useState<SimulationConfig>(() => {
+    const saved = localStorage.getItem('simulationConfig');
+    if (saved) {
+      try {
+        return { ...JSON.parse(saved) };
+      } catch (e) {
+        console.error('Failed to parse saved config', e);
+      }
+    }
+    return {
+      particleCount: 32,
+      baseRadius: 42,
+      speed: 1.2,
+      motionRange: 140,
+      dispersion: 0.35,
+      threshold: 1.1,
+      edgeLevel: 0.7,
+      pixelStep: 1,
+      gridSize: 80,
+      gridGap: 2,
+      dotScale: 1.05,
+      enableHalftone: true,
+      motionMode: 'random',
+      characterText: 'META',
+      imageSource: null,
+      imageScale: 1.0,
+      patternScale: 1.0,
+      offsetX: 0,
+      offsetY: 0,
+      oscSpeed: 1.8,
+      oscAmplitude: 160,
+      crossRotation: 0,
+      transitionSpeed: 0.15,
+      mainColor: '#ffffff',
+      gradientColorEnd: '#ef4444',
+      tintMode: 'single',
+      breathSpeed: 2.5,
+      breathRange: 0.5,
+      dotShape: 'roundedRect',
+      mixedShapes: ['circle', 'heart', 'star', 'music'],
+      customIconSources: Array(10).fill(null),
+      charEnableGlare: false,
+      charFlicker: 0.15,
+      charStatic: 0.1,
+      charDisplace: 0.05,
+      charFontSize: 180,
+      charPulseSpeed: 1.5,
+      charPulseIntensity: 0.2,
+      audioSensitivity: 1.8,
+      audioSmoothing: 0.85,
+      audioReactiveRadius: true,
+      audioReactiveGrid: false,
+      audioGridSensitivity: 1.2,
+      hmsEnabled: false,
+      hmsDistribution: 0.5,
+      chargingEnabled: false,
+      chargingDistribution: 0.5,
+      activeLibraryIcon: null,
+      pattern: MathPattern.VORTEX,
+      superEllipseRange: 150,
+      syncGridSize: true,
+      minGridSize: 80,
+      maxGridSize: 120,
+      interpolationType: 'easeInOut',
+      linearMitosisRange: 0.5,
+      hmsColor: '#ff0000',
+      hmsLowEnabled: false,
+      hmsLowDistribution: 0.5,
+      hmsLowColor: '#ffa500',
+      chargingColor: '#00ff00',
+    };
   });
 
   const [panelVisible, setPanelVisible] = useState(true);
   const [activePreset, setActivePreset] = useState<number>(1);
+
+  React.useEffect(() => {
+    localStorage.setItem('simulationConfig', JSON.stringify(config));
+  }, [config]);
 
   return (
     <div className="h-screen w-screen bg-black overflow-hidden relative font-sans">
@@ -63,7 +90,7 @@ const App: React.FC = () => {
       <MetaballCanvas config={config} />
 
       {/* Floating Toggle Button */}
-      <button 
+      <button
         onClick={() => setPanelVisible(!panelVisible)}
         className="absolute top-6 left-6 z-50 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center hover:bg-white/20 transition-all shadow-2xl"
         title={panelVisible ? "Hide Panel" : "Show Panel"}
@@ -76,16 +103,16 @@ const App: React.FC = () => {
       </button>
 
       {/* Floating Control Panel */}
-      <aside 
+      <aside
         className={`absolute top-0 left-0 h-full w-[350px] z-40 bg-black/30 border-r border-white/5 transition-transform duration-500 ease-out overflow-y-auto custom-scrollbar shadow-2xl ${panelVisible ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <div className="pt-20 pb-12">
-           <Controls 
-             config={config} 
-             onChange={setConfig} 
-             activePreset={activePreset} 
-             onPresetChange={setActivePreset} 
-           />
+          <Controls
+            config={config}
+            onChange={setConfig}
+            activePreset={activePreset}
+            onPresetChange={setActivePreset}
+          />
         </div>
       </aside>
 
